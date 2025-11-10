@@ -1,0 +1,49 @@
+<mvc:View controllerName="flightui5ev.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+    
+    <Table 
+        items="{
+        path: '/Flight',
+        sorter: { 
+        path: 'Carrname'
+        }
+
+}">
+
+         <headerToolbar>
+
+                  <OverflowToolbar >
+                    <Title text="{Products}" level="H2"/>
+                    <ToolbarSpacer />
+                    <Button text="Open Dialog" press="onOpenPressed"/>
+                  </OverflowToolbar>
+                </headerToolbar>
+
+                <columns>
+                  <Column >
+                    <Text text="{i18n>Carrid}"/>
+                  </Column>
+                  <Column>
+                    <Text text="{i18n>Carrname}"/>
+                  </Column>
+                  <Column>
+                    <Text text="{i18n>Url}"/>
+                  </Column>
+                </columns>
+
+                <items>
+                  <ColumnListItem vAlign="Middle" type="Navigation" press="onListItemPress">
+                    <cells>
+                      <Text text="{Carrid}"  wrapping="false"/>
+                      <Text text="{Carrname}" wrapping="false"/>
+                      <Text text="{Url}"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+
+              </Table>
+    
+    </Page>
+</mvc:View>

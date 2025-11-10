@@ -1,0 +1,80 @@
+<mvc:View displayBlock="true"
+  controllerName="flightui5ev.controller.Detail"
+  height="100%"
+  xmlns="sap.uxap"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:m="sap.m"
+  xmlns:form="sap.ui.layout.form">
+
+  <ObjectPageLayout id="opLayout"
+                    showTitleInHeaderContent="true"
+                    alwaysShowContentHeader="false"
+                    preserveHeaderStateOnScroll="false"
+                    headerContentPinnable="true"
+                    upperCaseAnchorBar="false">
+
+    <!-- Header -->
+    <headerTitle>
+      <ObjectPageDynamicHeaderTitle id="opDynHeaderTitle">
+        <expandedHeading>
+          <m:Title id="opTitleExpanded" text="Carrier: {Header>Carrid}" wrapping="true" class="sapUiSmallMarginEnd"/>
+        </expandedHeading>
+      </ObjectPageDynamicHeaderTitle>
+    </headerTitle>
+
+    <headerContent>
+      <m:FlexBox id="hdrFlex" wrap="Wrap" fitContainer="true" alignItems="Stretch">
+        <m:VBox id="hdrVBoxCarr" justifyContent="Center" class="sapUiSmallMarginEnd">
+          <m:Label id="lblCarrier" text="Carrier"/>
+          <m:Text id="txtCarrier" text="{Header>Carrid}"/>
+        </m:VBox>
+
+        <!-- Optional extra header fields if your header has them
+        <m:VBox id="hdrVBoxName" justifyContent="Center" class="sapUiSmallMarginEnd">
+          <m:Label id="lblName" text="Name"/>
+          <m:Text id="txtName" text="{Header>Carrname}"/>
+        </m:VBox>
+        <m:VBox id="hdrVBoxUrl" justifyContent="Center" class="sapUiSmallMarginEnd">
+          <m:Label id="lblUrl" text="Website"/>
+          <m:Link id="lnkUrl" text="{Header>Url}" href="{Header>Url}" target="_blank"/>
+        </m:VBox>
+        -->
+      </m:FlexBox>
+    </headerContent>
+
+    <!-- Sections -->
+    <sections>
+      <ObjectPageSection id="secFlightDetails" title="Flight Details">
+        <subSections>
+          <ObjectPageSubSection id="subFlightDetails">
+            <blocks>
+              <m:Table id="detailsTable" growing="true" growingScrollToLoad="true">
+                <m:columns>
+                  <m:Column id="colConnid"><m:Text id="colTxtConnid" text="Connid"/></m:Column>
+                  <m:Column id="colDate"><m:Text id="colTxtDate" text="Flight Date"/></m:Column>
+                  <m:Column id="colPlane"><m:Text id="colTxtPlane" text="Plane Type"/></m:Column>
+                  <m:Column id="colSeats"><m:Text id="colTxtSeats" text="Seats (Max / Occ)"/></m:Column>
+                  <m:Column id="colPrice"><m:Text id="colTxtPrice" text="Price"/></m:Column>
+                </m:columns>
+
+                <!-- Template only; binding (path/filters) is done in the controller -->
+                <m:items>
+                  <m:ColumnListItem id="detailsTemplate">
+                    <m:cells>
+                      <m:ObjectIdentifier id="cellConnid" title="{Connid}"/>
+                      <m:Text id="cellDate"
+                              text="{ path: 'Fldate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium' } }"/>
+                      <m:Text id="cellPlane" text="{PlaneType}"/>
+                      <m:Text id="cellSeats" text="{= ${SeatsMax} + ' / ' + ${SeatsOcc} }"/>
+                      <m:ObjectNumber id="cellPrice" number="{Price}" unit="{Currency}" emphasized="false"/>
+                    </m:cells>
+                  </m:ColumnListItem>
+                </m:items>
+              </m:Table>
+            </blocks>
+          </ObjectPageSubSection>
+        </subSections>
+      </ObjectPageSection>
+    </sections>
+  </ObjectPageLayout>
+</mvc:View>

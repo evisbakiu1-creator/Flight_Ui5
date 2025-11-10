@@ -1,0 +1,132 @@
+{
+  "_version": "1.73.1",
+  "sap.app": {
+    "id": "flightui5ev",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.19.3",
+      "toolsId": "129f8ad7-7b94-4b79-bd0a-a3a13e11af13"
+    },
+    "dataSources": {
+      "ZUI_FLIGHT_EVI_02_VAN": {
+        "uri": "/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZUI_FLIGHT_EVI_02_VAN',Version='0001')/$value/",
+        "type": "ODataAnnotation",
+        "settings": {
+          "localUri": "localService/mainService/ZUI_FLIGHT_EVI_02_VAN.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZUI_FLIGHT_EVI_02/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "ZUI_FLIGHT_EVI_02_VAN"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.136.8",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.uxap": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "flightui5ev.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "flightui5ev.view",
+        "async": true,
+        "viewPath": "flightui5ev.view"
+      },
+      "routes": [
+        {
+          "name": "Master",
+          "pattern": "",
+          "target": "Master"
+        },
+        {
+          "name": "Detail",
+          "pattern": "carrier/{Carrid}",
+          "target": "Detail"
+        }
+      ],
+      "targets": {
+        "Master": {
+          "id": "View1",
+          "name": "View1"
+        },
+        "Detail": {
+          "id": "Detail",
+          "name": "Detail"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "flightui5ev.view.App",
+      "type": "XML",
+      "id": "app",
+      "async": true
+    }
+  }
+}
