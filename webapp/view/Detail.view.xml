@@ -29,20 +29,10 @@
           <m:Text id="txtCarrier" text="{Header>Carrid}"/>
         </m:VBox>
 
-        <!-- Optional extra header fields if your header has them
-        <m:VBox id="hdrVBoxName" justifyContent="Center" class="sapUiSmallMarginEnd">
-          <m:Label id="lblName" text="Name"/>
-          <m:Text id="txtName" text="{Header>Carrname}"/>
-        </m:VBox>
-        <m:VBox id="hdrVBoxUrl" justifyContent="Center" class="sapUiSmallMarginEnd">
-          <m:Label id="lblUrl" text="Website"/>
-          <m:Link id="lnkUrl" text="{Header>Url}" href="{Header>Url}" target="_blank"/>
-        </m:VBox>
-        -->
+      
       </m:FlexBox>
     </headerContent>
 
-    <!-- Sections -->
     <sections>
       <ObjectPageSection id="secFlightDetails" title="Flight Details">
         <subSections>
@@ -57,7 +47,6 @@
                   <m:Column id="colPrice"><m:Text id="colTxtPrice" text="Price"/></m:Column>
                 </m:columns>
 
-                <!-- Template only; binding (path/filters) is done in the controller -->
                 <m:items>
                   <m:ColumnListItem id="detailsTemplate">
                     <m:cells>
