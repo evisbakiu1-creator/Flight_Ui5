@@ -4,6 +4,12 @@ sap.ui.define([
 ], function (Time, DateFormat) {
     "use strict";
 
+    
+    function imgUrl(file) {
+    
+        return sap.ui.require.toUrl("flightui5ev/img/" + file);
+    }
+
     return {
         formatTableDates: function (oDate) {
             if (!oDate) {
@@ -15,15 +21,17 @@ sap.ui.define([
             var year = date.getFullYear();
             return day + "." + month + "." + year;
         },
+
         getCarrierLogo: function (sCarrid) {
-            if (!sCarrid) {
-                return "img/default_logo.png";
-            }
-            var id = String(sCarrid).trim().toUpperCase();
+            var id = (sCarrid || "").toString().trim().toUpperCase();
+
             switch (id) {
-                case "SR": return "img/lufthansa.png";
-                case "AB": return "img/Logo_airberlin.svg.png";
-                default:   return "img/default_logo.png";
+                case "SR":
+                    return imgUrl("lufthansa.png");
+                case "AB":
+                    return imgUrl("Logo_airberlin.svg.png");
+                default:
+                    return imgUrl("default_logo.png");
             }
         },
 
