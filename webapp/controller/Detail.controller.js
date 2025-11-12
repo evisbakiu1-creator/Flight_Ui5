@@ -1,47 +1,46 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
-  "sap/ui/model/json/JSONModel",
-  "sap/ui/model/Filter",
-  "sap/ui/model/FilterOperator",
-  "sap/ui/model/Sorter"
-], function (Controller, JSONModel, Filter, FilterOperator, Sorter) {
+  "flightui5ev/formatter/Formatter",
+], (Controller, Formatter, JSONModel) => {
   "use strict";
 
   return Controller.extend("flightui5ev.controller.Detail", {
-    onInit: function () {
-      this.getOwnerComponent().getRouter()
-        .getRoute("Detail")
-        .attachPatternMatched(this._onMatched, this);
-    },
 
-    _onMatched: function (oEvent) {
-      var sCarrid = oEvent.getParameter("arguments").Carrid;
-      var oView   = this.getView();
-      var oModel  = this.getOwnerComponent().getModel();
+    formatter: Formatter,
 
-      // Header (optional): read the carrier entity to show at top
-      // If your service has /Flight('<Carrid>')
-      oModel.read("/Flight('" + sCarrid + "')", {
-        success: function (oData) {
-          oView.setModel(new JSONModel(oData), "Header");
-        }
-        // error: function() { /* ignore */ }
-      });
+    onInit() {
+            
+            this.getOwnerComponent().getRouter().getRoute("Detail").attachPatternMatched(this._onObjectMatched, this);
+            this.getView().getModel("FlightDetailModel");
+        },
 
-      // Bind child table to your details entity set FlightDetailsEVI
-      // Keys: (Carrid, Connid, IsActiveEntity). We filter by Carrid and active=true.
-      var oTable    = oView.byId("detailsTable");
-      var oTemplate = oTable.getBindingInfo("items").template.clone();
 
-      oTable.bindItems({
-        path: "/FlightDetailsEVI",
-        filters: [
-          new Filter("Carrid", FilterOperator.EQ, sCarrid),
-          new Filter("IsActiveEntity", FilterOperator.EQ, true)
-        ],
-        sorter: [ new Sorter("Connid", false) ],
-        template: oTemplate
-      });
-    }
-  });
+    _onObjectMatched: function (oEvent) {
+               //read the url parameters
+                var sCarrId = oEvent.getParameter("arguments").Carrid;
+
+                var oDetailJSONModel = new sap.ui.model.json.JSONModel();
+                var that = this;
+                //read the data from Back End (READ_GET_ENTITY)
+                var oDataModel = this.getOwnerComponent().getModel();
+                var sPath = "/Flight(Carrid='" + sCarrId + "',IsActiveEntity=true)";
+
+                oDataModel.read(sPath, {
+                    urlParameters: {
+                        "$expand": "to_DetailEVI" // Replace with your navigation property name
+                    },
+
+                    success: function (oresponse) {
+                        console.log(oresponse);
+                        //attach the data to the model
+                        oDetailJSONModel.setData(oresponse);
+                        //attach the Model to the View
+                        that.getView().setModel(oDetailJSONModel, "FlightDetailModel");
+                        console.log(that.getView().getModel("FlightDetailModel"));
+                    },
+                    error: function (oerror) { },
+                });
+            },
+    });
 });
+

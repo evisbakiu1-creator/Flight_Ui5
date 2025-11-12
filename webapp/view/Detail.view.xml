@@ -1,69 +1,164 @@
-<mvc:View displayBlock="true"
-  controllerName="flightui5ev.controller.Detail"
-  height="100%"
-  xmlns="sap.uxap"
-  xmlns:mvc="sap.ui.core.mvc"
-  xmlns:m="sap.m"
-  xmlns:form="sap.ui.layout.form">
+<mvc:View 
+    controllerName="flightui5ev.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"  
+    xmlns:m="sap.m" 
+	xmlns="sap.uxap"> 
 
-  <ObjectPageLayout id="opLayout"
-                    showTitleInHeaderContent="true"
-                    alwaysShowContentHeader="false"
-                    preserveHeaderStateOnScroll="false"
-                    headerContentPinnable="true"
-                    upperCaseAnchorBar="false">
+    <ObjectPageLayout id="ObjectPageLayout"
+					 showTitleInHeaderContent="true"
+					alwaysShowContentHeader="false"
+					preserveHeaderStateOnScroll="false"
+					headerContentPinnable="true"
+					isChildPage="true"
+					upperCaseAnchorBar="false">
 
-    <!-- Header -->
-    <headerTitle>
-      <ObjectPageDynamicHeaderTitle id="opDynHeaderTitle">
-        <expandedHeading>
-          <m:Title id="opTitleExpanded" text="Carrier: {Header>Carrid}" wrapping="true" class="sapUiSmallMarginEnd"/>
-        </expandedHeading>
-      </ObjectPageDynamicHeaderTitle>
-    </headerTitle>
+				<headerTitle>
+					<ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
+						<expandedHeading>
+							<m:Title id="_IDGenTitle2" text="{FlightDetailModel>/Carrname}" wrapping="true" class="sapUiSmallMarginEnd"/>
+						</expandedHeading>
 
-    <headerContent>
-      <m:FlexBox id="hdrFlex" wrap="Wrap" fitContainer="true" alignItems="Stretch">
-        <m:VBox id="hdrVBoxCarr" justifyContent="Center" class="sapUiSmallMarginEnd">
-          <m:Label id="lblCarrier" text="Carrier"/>
-          <m:Text id="txtCarrier" text="{Header>Carrid}"/>
-        </m:VBox>
+						<snappedHeading>
+							<m:FlexBox id="_IDGenFlexBox" wrap="Wrap" fitContainer="true" alignItems="Center">
+								<m:FlexBox id="_IDGenFlexBox1" wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
+									<!-- <m:Image id="_IDGenAvatar" src="flightui5ev/webapp/img/default_logo.png" /> -->
+									<!-- <m:Avatar id="_IDGenAvatar" src="{path: 'FlightDetailModel>Carrid', formatter:'.formatter.getCarrierLogo'}" displaySize="S" displayShape="Square"/> -->
+									<m:Title id="_IDGenTitle3" text="{FlightDetailModel>/Carrname}" wrapping="true" class="sapUiTinyMarginEnd"/>
+								</m:FlexBox>
+							</m:FlexBox>
+						</snappedHeading>
 
-      
-      </m:FlexBox>
-    </headerContent>
+						<navigationActions>
+							<m:OverflowToolbarButton id="_IDGenOverflowToolbarButton" type="Transparent" icon="sap-icon://full-screen" press="handleFullScreen" tooltip="Enter Full Screen Mode" visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }"/>
+							<m:OverflowToolbarButton id="_IDGenOverflowToolbarButton1" type="Transparent" icon="sap-icon://exit-full-screen" press="handleExitFullScreen" tooltip="Exit Full Screen Mode" visible="{= ${/actionButtonsInfo/midColumn/exitFullScreen} !== null }"/>
+							<m:OverflowToolbarButton id="_IDGenOverflowToolbarButton2" type="Transparent" icon="sap-icon://decline" press="handleClose"  tooltip="Close column" visible="{= ${/actionButtonsInfo/midColumn/closeColumn} !== null }"/>
+						</navigationActions>
 
-    <sections>
-      <ObjectPageSection id="secFlightDetails" title="Flight Details">
-        <subSections>
-          <ObjectPageSubSection id="subFlightDetails">
-            <blocks>
-              <m:Table id="detailsTable" growing="true" growingScrollToLoad="true">
-                <m:columns>
-                  <m:Column id="colConnid"><m:Text id="colTxtConnid" text="Connid"/></m:Column>
-                  <m:Column id="colDate"><m:Text id="colTxtDate" text="Flight Date"/></m:Column>
-                  <m:Column id="colPlane"><m:Text id="colTxtPlane" text="Plane Type"/></m:Column>
-                  <m:Column id="colSeats"><m:Text id="colTxtSeats" text="Seats (Max / Occ)"/></m:Column>
-                  <m:Column id="colPrice"><m:Text id="colTxtPrice" text="Price"/></m:Column>
-                </m:columns>
+					</ObjectPageDynamicHeaderTitle>
+				</headerTitle>
 
-                <m:items>
-                  <m:ColumnListItem id="detailsTemplate">
-                    <m:cells>
-                      <m:ObjectIdentifier id="cellConnid" title="{Connid}"/>
-                      <m:Text id="cellDate"
-                              text="{ path: 'Fldate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium' } }"/>
-                      <m:Text id="cellPlane" text="{PlaneType}"/>
-                      <m:Text id="cellSeats" text="{= ${SeatsMax} + ' / ' + ${SeatsOcc} }"/>
-                      <m:ObjectNumber id="cellPrice" number="{Price}" unit="{Currency}" emphasized="false"/>
-                    </m:cells>
-                  </m:ColumnListItem>
-                </m:items>
-              </m:Table>
-            </blocks>
-          </ObjectPageSubSection>
-        </subSections>
-      </ObjectPageSection>
-    </sections>
-  </ObjectPageLayout>
+				<headerContent>
+					<m:FlexBox id="_IDGenFlexBox2" wrap="Wrap" fitContainer="true" alignItems="Stretch">
+						<m:Avatar id="_IDGenAvatar1" src="{path: 'FlightDetailModel>/Carrid', formatter:'.formatter.getCarrierLogo'}"
+								  displaySize="L"
+								  displayShape="Square"
+								  class="sapUiTinyMarginEnd">
+						</m:Avatar>
+
+						<m:VBox id="_IDGenVBox" justifyContent="Center" class="sapUiSmallMarginEnd">
+							<m:Label id="_IDGenLabel" text="Airline ID"/>
+							<m:Text id="_IDGenText6" text="{FlightDetailModel>/Carrid}"/>
+						</m:VBox>
+						
+						<m:VBox id="_IDGenVBox2" justifyContent="Center" class="sapUiSmallMarginEnd">
+							<m:Label id="_IDGenLabel2" text="Currency"/>
+							<m:ObjectNumber id="_IDGenObjectNumber" number="{FlightDetailModel>/Currcode}" emphasized="false"/>
+							
+					
+							<m:HBox id="urlRow"
+        alignItems="Center"
+        class="sapUiSmallMarginTop"
+        visible="{
+          parts: ['FlightDetailModel>/Url','FlightDetailModel>/Carrname'],
+          formatter: '.formatter.shouldShowUrlRow'
+        }">
+
+  <m:Label id="urlLabel" text="URL:" class="sapUiTinyMarginEnd" />
+
+  <m:Link  id="urlLink"
+           text="{
+             parts: ['FlightDetailModel>/Url','FlightDetailModel>/Carrname'],
+             formatter: '.formatter.displayUrl'
+           }"
+           href="{
+             parts: ['FlightDetailModel>/Url','FlightDetailModel>/Carrname'],
+             formatter: '.formatter.hrefUrl'
+           }"
+           target="_blank"
+           wrapping="true" />
+</m:HBox>
+
+							
+						</m:VBox>
+					</m:FlexBox>
+				</headerContent>
+
+		<sections>
+			<ObjectPageSection id="_IDGenObjectPageSection" title="General Information">
+				<subSections>
+					<ObjectPageSubSection id="_IDGenObjectPageSubSection">
+						<blocks>
+							 <m:Table id="_IDGenTable" 
+								items="{
+										path: 'FlightDetailModel>/to_DetailEVI/results'
+									}">
+		<m:headerToolbar>
+			<m:OverflowToolbar id="_IDGenOverflowToolbar1" >
+				<m:Title id="_IDGenTitle1"  text="{i18n>detailTitle}" level="H2"/>
+				<m:ToolbarSpacer id="_IDGenToolbarSpacer1" />
+			</m:OverflowToolbar>
+		</m:headerToolbar> 
+		<m:columns>
+			<m:Column id="_IDGenColumn4" >
+				<m:Text id="_IDGenText9"  text="{i18n>ConnNo}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn5" >
+				<m:Text id="_IDGenText10"  text="{i18n>FlightDate}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn6">
+				<m:Text id="_IDGenText11" text="{i18n>AirFare}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn7">
+				<m:Text id="_IDGenText12" text="{i18n>AirlineLocalCurrency}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn8">
+				<m:Text id="_IDGenText13"  text="{i18n>MaxTypeEco}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn9">
+				<m:Text id="_IDGenText14" text="{i18n>OccSeatsEco}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn10">
+				<m:Text id="_IDGenText15" text="{i18n>MaxTypeBsns}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn11">
+				<m:Text id="_IDGenText16" text="{i18n>OccSeatsBsns}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn12">
+				<m:Text id="_IDGenText17" text="{i18n>MaxTypeFrst}" />
+			</m:Column>
+			<m:Column id="_IDGenColumn13">
+				<m:Text id="_IDGenText18" text="{i18n>OccSeatsFrst}" />
+			</m:Column>
+		</m:columns>
+		<m:items>
+			<m:ColumnListItem id="_IDGenColumnListItem1" vAlign="Middle" highlight="{= ${FlightDetailModel>SeatsOcc} > 180 ? 'Success' : 'Error' }">
+				<m:cells>
+					<m:Text id="_IDGenText19" text="{FlightDetailModel>Connid}" wrapping="false" />
+					<m:Text id="_IDGenText20"  text="{FlightDetailModel>Fldate}" wrapping="false"/>
+					<!-- <m:Text id="_IDGenText76"  text="{path: 'FlightDetailModel>Fldate', formatter:'.formatter.formatTableDates'}" wrapping="false"/> -->
+					<m:Text id="_IDGenText90"  text="{path: 'FlightDetailModel>Fldate', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'MM/dd/yyyy' }}" wrapping="false"/>
+					<m:Text id="_IDGenText21"  text="{FlightDetailModel>Price}" />
+					<m:Text id="_IDGenText22"  text="{FlightDetailModel>Currency}" />
+					<m:Text id="_IDGenText23"  text="{FlightDetailModel>PlaneType}" />
+					<m:Text id="_IDGenText24"  text="{FlightDetailModel>SeatsMax}" />
+					<m:Text id="_IDGenText25"  text="{FlightDetailModel>SeatsOcc}" />
+					<m:Text id="_IDGenText26"  text="{FlightDetailModel>PaymentSum}" />
+					<m:Text id="_IDGenText27"  text="{FlightDetailModel>SeatsmaxB}" />
+					<m:Text id="_IDGenText28"  text="{FlightDetailModel>SeatsoccB}" />
+					<m:Text id="_IDGenText29"  text="{FlightDetailModel>SeatsmaxF}" />
+					<m:Text id="_IDGenText30"  text="{FlightDetailModel>SeatsoccF}" />
+				</m:cells>
+			</m:ColumnListItem>
+		</m:items>
+	</m:Table>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+		</sections>
+	</ObjectPageLayout>
+
+
+
+
 </mvc:View>
