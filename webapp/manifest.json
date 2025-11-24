@@ -52,7 +52,7 @@
       "phone": true
     }
   },
- "sap.ui5": {
+  "sap.ui5": {
     "flexEnabled": true,
     "dependencies": {
       "minUI5Version": "1.136.8",
@@ -97,7 +97,7 @@
         "async": true,
         "viewPath": "flightui5ev.view"
       },
-       "routes": [
+      "routes": [
         {
           "name": "TargetView1",
           "pattern": ":?query:",
@@ -111,12 +111,12 @@
           "target": "Detail"
         }
       ],
-       "targets": {
+      "targets": {
         "TargetView1": {
           "id": "View1",
           "name": "View1"
         },
-         "Detail": {
+        "Detail": {
           "viewId": "Detail",
           "viewName": "Detail",
           "viewLevel": 1

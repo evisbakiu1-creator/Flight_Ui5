@@ -86,10 +86,11 @@
                     <PropertyRef Name="IsActiveEntity"/>
                 </Key>
                 <Property Name="cancelEconomySeat_ac" Type="Edm.Boolean" sap:label="Dyn. Action Control" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="cancelEconomySeat2_ac" Type="Edm.Boolean" sap:label="Dyn. Action Control" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Delete_mc" Type="Edm.Boolean" sap:label="Dyn. Method Control" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Update_mc" Type="Edm.Boolean" sap:label="Dyn. Method Control" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Carrid" Type="Edm.String" Nullable="false" MaxLength="3" sap:updatable="false"/>
-                <Property Name="Connid" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="NonNegative" sap:label="Connection Number"/>
+                <Property Name="Connid" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="NonNegative" sap:label="Connection Number" sap:updatable="false"/>
                 <Property Name="Fldate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Flight Date"/>
                 <Property Name="Price" Type="Edm.String" MaxLength="5" sap:label="Airfare" sap:semantics="currency-code"/>
                 <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Airline Local Currency" sap:semantics="currency-code"/>
@@ -513,6 +514,12 @@
                     <Parameter Name="Connid" Type="Edm.String" Mode="In" MaxLength="4"/>
                     <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Mode="In" sap:label="Is active"/>
                 </FunctionImport>
+                <FunctionImport Name="cancelEconomySeat2" ReturnType="cds_zui_flight_evi_o4.FlightDetailsEVIType" EntitySet="FlightDetailsEVI" m:HttpMethod="POST" sap:action-for="cds_zui_flight_evi_o4.FlightDetailsEVIType" sap:applicable-path="cancelEconomySeat2_ac">
+                    <Parameter Name="Carrid" Type="Edm.String" Mode="In" MaxLength="3"/>
+                    <Parameter Name="Connid" Type="Edm.String" Mode="In" MaxLength="4"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Mode="In" sap:label="Is active"/>
+                    <Parameter Name="seat_count" Type="Edm.Int32" Mode="In" Nullable="true" sap:label="Number of Seats to Cancel"/>
+                </FunctionImport>
                 <FunctionImport Name="FlightActivate" ReturnType="cds_zui_flight_evi_o4.FlightType" EntitySet="Flight" m:HttpMethod="POST" sap:action-for="cds_zui_flight_evi_o4.FlightType">
                     <Parameter Name="Carrid" Type="Edm.String" Mode="In" MaxLength="3"/>
                     <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Mode="In" sap:label="Is active"/>
@@ -520,6 +527,20 @@
                 <FunctionImport Name="addUrl" ReturnType="cds_zui_flight_evi_o4.FlightType" EntitySet="Flight" m:HttpMethod="POST" sap:action-for="cds_zui_flight_evi_o4.FlightType" sap:applicable-path="addUrl_ac">
                     <Parameter Name="Carrid" Type="Edm.String" Mode="In" MaxLength="3"/>
                     <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Mode="In" sap:label="Is active"/>
+                </FunctionImport>
+                <FunctionImport Name="create_airline" ReturnType="cds_zui_flight_evi_o4.DummyFunctionImportResult" m:HttpMethod="POST">
+                    <Parameter Name="Carrid" Type="Edm.String" Mode="In" MaxLength="3" Nullable="true"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.String" Mode="In" MaxLength="3" Nullable="true"/>
+                    <Parameter Name="Carrname" Type="Edm.String" Mode="In" MaxLength="20" Nullable="true"/>
+                    <Parameter Name="Currcode" Type="Edm.String" Mode="In" MaxLength="5" Nullable="true"/>
+                    <Parameter Name="Url" Type="Edm.String" Mode="In" MaxLength="255" Nullable="true"/>
+                </FunctionImport>
+                <FunctionImport Name="delete_airline" ReturnType="cds_zui_flight_evi_o4.DummyFunctionImportResult" m:HttpMethod="POST">
+                    <Parameter Name="Carrid" Type="Edm.String" Mode="In" MaxLength="3" Nullable="true"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.String" Mode="In" MaxLength="3" Nullable="true"/>
+                    <Parameter Name="Carrname" Type="Edm.String" Mode="In" MaxLength="20" Nullable="true"/>
+                    <Parameter Name="Currcode" Type="Edm.String" Mode="In" MaxLength="5" Nullable="true"/>
+                    <Parameter Name="Url" Type="Edm.String" Mode="In" MaxLength="255" Nullable="true"/>
                 </FunctionImport>
                 <FunctionImport Name="FlightDiscard" ReturnType="cds_zui_flight_evi_o4.DummyFunctionImportResult" m:HttpMethod="POST" sap:action-for="cds_zui_flight_evi_o4.FlightType">
                     <Parameter Name="Carrid" Type="Edm.String" Mode="In" MaxLength="3"/>
@@ -676,6 +697,7 @@
                         <PropertyValue Property="NonFilterableProperties">
                             <Collection>
                                 <PropertyPath>cancelEconomySeat_ac</PropertyPath>
+                                <PropertyPath>cancelEconomySeat2_ac</PropertyPath>
                                 <PropertyPath>Delete_mc</PropertyPath>
                                 <PropertyPath>Update_mc</PropertyPath>
                             </Collection>
@@ -734,6 +756,7 @@
                         <PropertyValue Property="NonSortableProperties">
                             <Collection>
                                 <PropertyPath>cancelEconomySeat_ac</PropertyPath>
+                                <PropertyPath>cancelEconomySeat2_ac</PropertyPath>
                                 <PropertyPath>Delete_mc</PropertyPath>
                                 <PropertyPath>Update_mc</PropertyPath>
                             </Collection>
@@ -745,6 +768,7 @@
                         <PropertyValue Property="NonUpdatableProperties">
                             <Collection>
                                 <PropertyPath>Carrid</PropertyPath>
+                                <PropertyPath>Connid</PropertyPath>
                             </Collection>
                         </PropertyValue>
                         <PropertyValue Property="NonUpdatableNavigationProperties">
@@ -900,9 +924,6 @@
                     </Record>
                 </Annotation>
             </Annotations>
-            <Annotations Target="cds_zui_flight_evi_o4.FlightDetailsEVIType/Connid" xmlns="http://docs.oasis-open.org/odata/ns/edm">
-                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
-            </Annotations>
             <Annotations Target="cds_zui_flight_evi_o4.FlightDetailsEVIType/Currency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
@@ -943,6 +964,9 @@
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
             <Annotations Target="cds_zui_flight_evi_o4.FlightDetailsEVIType/Carrid" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="cds_zui_flight_evi_o4.FlightDetailsEVIType/Connid" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="SAP__core.Immutable"/>
             </Annotations>
             <Annotations Target="cds_zui_flight_evi_o4.FlightType/Carrid" xmlns="http://docs.oasis-open.org/odata/ns/edm">

@@ -1,45 +1,70 @@
-<mvc:View controllerName="flightui5ev.controller.View1"
+<mvc:View
+    controllerName="flightui5ev.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
+
     <Page id="page" title="{i18n>title}">
-    <Table id="_IDGenTable1"
-		items="{
-			path: 'flightDataModel>/',
-			sorter: {
-				path: 'Carrname'
-			}
-		}">
-		<headerToolbar>
-			<OverflowToolbar id="_IDGenOverflowToolbar">
-				<Title id="_IDGenTitle" text="{Products}" level="H2"/>
-				<ToolbarSpacer id="_IDGenToolbarSpacer"/>
-				<Button id="_IDGenButton" text="Open Dialog" press="onOpenPressed"/>
-			</OverflowToolbar>
-		</headerToolbar>
-		<columns>
-			<Column id="_IDGenColumn">
-				<Text id="_IDGenText" text="{i18n>airlineId}" />
-			</Column>
-			<Column id="_IDGenColumn1">
-				<Text id="_IDGenText1" text="{i18n>airlineName}" />
-			</Column>
-			<Column id="_IDGenColumn2">
-				<Text id="_IDGenText2" text="{i18n>currency}" />
-			</Column>
-			<Column id="_IDGenColumn3">
-				<Text id="_IDGenText3" text="{i18n>url}" />
-			</Column>
-		</columns>
-		<items>
-			<ColumnListItem id="_IDGenColumnListItem" vAlign="Middle" type="Navigation" press="onListItemPress" >
-				<cells>
-					<Text id="_IDGenText4" text="{flightDataModel>Carrid}" wrapping="false" />
-					<Text id="_IDGenText5" text="{flightDataModel>Carrname}" wrapping="false"/>
-					<Text id="_IDGenText7" text="{flightDataModel>Currency}" />
-					<Text id="_IDGenText8" text="{flightDataModel>Url}" />
-				</cells>
-			</ColumnListItem>
-		</items>
-	</Table>
+        <Table
+            id="_IDGenTable1"
+            items="{
+                path: 'flightDataModel>/',
+                sorter: {
+                    path: 'Carrname'
+                }
+            }"
+            mode="SingleSelectLeft"
+            selectionChange="onSelectionChange">
+
+            <headerToolbar>
+                <OverflowToolbar id="_IDGenOverflowToolbar">
+                    <Title id="_IDGenTitle" text="{Products}" level="H2"/>
+                    <ToolbarSpacer id="_IDGenToolbarSpacer"/>
+                    <Button id="_IDGenButton1" text="Create Airline" press="onAddNewRecord"/>
+                    <Button id="_IDGenButton2" text="Update Airline" press="onUpdateRecord" />
+                </OverflowToolbar>
+            </headerToolbar>
+
+            <columns>
+                <Column id="_IDGenColumn">
+                    <Text id="_IDGenText" text="{i18n>airlineId}" />
+                </Column>
+                <Column id="_IDGenColumn1">
+                    <Text id="_IDGenText1" text="{i18n>airlineName}" />
+                </Column>
+                <Column id="_IDGenColumn2">
+                    <Text id="_IDGenText2" text="{i18n>Currcode}" />
+                </Column>
+                <Column id="_IDGenColumn3">
+                    <Text id="_IDGenText3" text="{i18n>url}" />
+                </Column>
+
+                <Column id="_IDGenColumn4" width="4rem" hAlign="Center">
+                    <Text id="_IDGenTextRemove" text="Remove" />
+                </Column>
+            </columns>
+
+            <items>
+                <ColumnListItem
+                    id="_IDGenColumnListItem"
+                    vAlign="Middle"
+                    type="Active"
+                    press="onListItemPress">
+
+                    <cells>
+                        <Text id="_IDGenText4" text="{flightDataModel>Carrid}"  wrapping="false" />
+                        <Text id="_IDGenText5" text="{flightDataModel>Carrname}" wrapping="false" />
+                        <Text id="_IDGenText7" text="{flightDataModel>Currcode}" />
+                        <Text id="_IDGenText8" text="{flightDataModel>Url}" />
+
+                        <Button
+                            id="_IDGenDeleteButton"
+                            icon="sap-icon://delete"
+                            type="Transparent"
+                            tooltip="Delete airline"
+                            press="onDeleteAirline" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
     </Page>
 </mvc:View>

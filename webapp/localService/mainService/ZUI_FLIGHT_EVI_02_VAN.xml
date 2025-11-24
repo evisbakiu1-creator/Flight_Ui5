@@ -106,6 +106,9 @@
             <Annotations Target="cds_zui_flight_evi_o4.FlightDetailsEVIType/cancelEconomySeat_ac">
                 <Annotation Term="UI.Hidden"/>
             </Annotations>
+            <Annotations Target="cds_zui_flight_evi_o4.FlightDetailsEVIType/cancelEconomySeat2_ac">
+                <Annotation Term="UI.Hidden"/>
+            </Annotations>
             <Annotations Target="cds_zui_flight_evi_o4.FlightDetailsEVIType/Delete_mc">
                 <Annotation Term="UI.Hidden"/>
             </Annotations>
@@ -182,16 +185,7 @@
                         </Record>
                         <Record Type="UI.DataFieldForAction">
                             <PropertyValue Property="Label" String="Cancel Multiple Seats"/>
-                            <PropertyValue Property="Action" String="">
-                                <Annotation Term="Core.Messages">
-                                    <Collection>
-                                        <Record>
-                                            <PropertyValue Property="message" String="ERROR: Mandatory Value for Action not found"/>
-                                            <PropertyValue Property="severity" String="error"/>
-                                        </Record>
-                                    </Collection>
-                                </Annotation>
-                            </PropertyValue>
+                            <PropertyValue Property="Action" String="cds_zui_flight_evi_o4.cds_zui_flight_evi_o4_Entities/cancelEconomySeat2"/>
                             <PropertyValue Property="InvocationGrouping" EnumMember="UI.OperationGroupingType/Isolated"/>
                         </Record>
                         <Record Type="UI.DataFieldForAction">
@@ -249,16 +243,7 @@
                         </Record>
                         <Record Type="UI.DataFieldForAction">
                             <PropertyValue Property="Label" String="Cancel Multiple Seats"/>
-                            <PropertyValue Property="Action" String="">
-                                <Annotation Term="Core.Messages">
-                                    <Collection>
-                                        <Record>
-                                            <PropertyValue Property="message" String="ERROR: Mandatory Value for Action not found"/>
-                                            <PropertyValue Property="severity" String="error"/>
-                                        </Record>
-                                    </Collection>
-                                </Annotation>
-                            </PropertyValue>
+                            <PropertyValue Property="Action" String="cds_zui_flight_evi_o4.cds_zui_flight_evi_o4_Entities/cancelEconomySeat2"/>
                             <PropertyValue Property="InvocationGrouping" EnumMember="UI.OperationGroupingType/Isolated"/>
                         </Record>
                     </Collection>

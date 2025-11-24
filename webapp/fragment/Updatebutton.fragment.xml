@@ -1,0 +1,60 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Dialog
+        id="updateAirlineDialog"
+        title="Update Airline"
+        draggable="true"
+        resizable="true">
+
+        <VBox
+            id="updateAirlineVBox"
+            class="sapUiSmallMargin">
+
+            <Label
+                id="updLblCarrId"
+                text="Airline ID" />
+            <Input
+                id="updCarrIDInput"
+                value="{flightDataModel>Carrid}"
+                editable="false" />
+
+            <Label
+                id="updLblCarrName"
+                text="Airline Name" />
+            <Input
+                id="updCarrNameInput"
+                value="{flightDataModel>Carrname}" />
+
+            <Label
+                id="updLblCurrCode"
+                text="Currency" />
+            <Input
+                id="updCurrCodeInput"
+                value="{flightDataModel>Currcode}" />
+
+            <Label
+                id="updLblUrl"
+                text="URL" />
+            <Input
+                id="updURLInput"
+                value="{flightDataModel>Url}" />
+        </VBox>
+
+        <beginButton>
+            <Button
+                id="updSaveBtn"
+                text="Save"
+                press=".onSaveUpdate" />
+        </beginButton>
+
+        <endButton>
+            <Button
+                id="updCancelBtn"
+                text="Cancel"
+                press=".onCancelUpdate" />
+        </endButton>
+
+    </Dialog>
+</core:FragmentDefinition>

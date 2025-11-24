@@ -99,7 +99,7 @@
 			</m:OverflowToolbar>
 		</m:headerToolbar> 
 		<m:columns>
-			<m:Column id="_IDGenColumn4" >
+			<m:Column id="_IDGenColumn80" >
 				<m:Text id="_IDGenText9"  text="{i18n>ConnNo}" />
 			</m:Column>
 			<m:Column id="_IDGenColumn5" >
