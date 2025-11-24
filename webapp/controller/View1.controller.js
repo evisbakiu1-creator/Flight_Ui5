@@ -1,9 +1,13 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
-    "sap/ui/model/json/JSONModel"
-], (Controller, MessageToast, JSONModel) => {
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/export/Spreadsheet",
+    "sap/ui/export/library"
+], (Controller, MessageToast, JSONModel, Spreadsheet, exportLibrary) => {
     "use strict";
+
+    const EdmType = exportLibrary.EdmType;
 
     return Controller.extend("flightui5ev.controller.View1", {
 
@@ -22,12 +26,69 @@ sap.ui.define([
                     that.getView().setModel(oFlightJSONModel, "flightDataModel");
                 },
                 error(oError) {
-                    // handle error if needed
+                    
                 }
             });
         },
 
-        // navigate to detail when row (not delete btn) is pressed
+        // DOWNLOAD TO EXCEL
+
+        onExport() {
+            const oView = this.getView();
+            const oModel = oView.getModel("flightDataModel");
+
+            if (!oModel) {
+                MessageToast.show("No data to export");
+                return;
+            }
+
+            const aData = oModel.getData();   
+
+            if (!aData || !aData.length) {
+                MessageToast.show("Table is empty");
+                return;
+            }
+             const aCols = this._createColumnConfig();
+             const oSettings = {
+                workbook: {
+                    columns: aCols
+                },
+                dataSource: aData,
+                fileName: "Airlines.xlsx"
+            };
+
+            const oSheet = new Spreadsheet(oSettings);
+            oSheet.build().finally(function () {
+                oSheet.destroy();
+            });
+        },
+
+        _createColumnConfig() {
+            return [
+                {
+                    label: "Airline ID",
+                    property: "Carrid",
+                    type: EdmType.String
+                },
+                {
+                    label: "Airline Name",
+                    property: "Carrname",
+                    type: EdmType.String
+                },
+                {
+                    label: "Currency",
+                    property: "Currcode",
+                    type: EdmType.String
+                },
+                {
+                    label: "URL",
+                    property: "Url",
+                    type: EdmType.String
+                }
+            ];
+        },
+
+
         onListItemPress(oEvent) {
             this.getOwnerComponent().getRouter().navTo("Detail", {
                 Carrid: oEvent.getSource()
@@ -36,14 +97,12 @@ sap.ui.define([
             });
         },
 
-        // table row selection (for update)
+
         onSelectionChange(oEvent) {
             this._oSelectedItem = oEvent.getParameter("listItem");
         },
 
-        // --- CREATE DIALOG ----------------------------------------------------
-
-          onAddNewRecord() {
+        onAddNewRecord() {
             if (!this.oDialog) {
                 this.loadFragment({
                     name: "flightui5ev.fragment.CreateAirline"
@@ -96,7 +155,7 @@ sap.ui.define([
             this.oDialog.close();
         },
 
-       readFlight(that) {
+        readFlight(that) {
             const oFlightModel = that.getView().getModel("flightDataModel");
             const oDataModel = that.getOwnerComponent().getModel();
             const sPath = "/Flight";
@@ -106,11 +165,9 @@ sap.ui.define([
                 success(oresponse) {
                     oFlightModel.setData(oresponse.results);
                 },
-                error(oError) { },
+                error(oError) { }
             });
         },
-
-        // --- UPDATE DIALOG ----------------------------------------------------
 
         onUpdateRecord() {
             if (!this._oSelectedItem) {
@@ -137,55 +194,53 @@ sap.ui.define([
         },
 
         onSaveUpdate() {
-    // 1. Get current row data from the JSON model (flightDataModel)
-    const oCtx = this.oUpdateDialog.getBindingContext("flightDataModel");
-    const oRow = oCtx.getObject();
 
-    // key and new values
-    const sCarrid  = oRow.Carrid; // Key
-    const sNewName = this.byId("updCarrNameInput").getValue();
-    const sNewCurr = this.byId("updCurrCodeInput").getValue();
-    const sNewUrl  = this.byId("updURLInput").getValue();
+            const oCtx = this.oUpdateDialog.getBindingContext("flightDataModel");
+            const oRow = oCtx.getObject();
 
-    // 2. Get the OData model (real backend model)
-    const oODataModel = this.getOwnerComponent().getModel();
-    const that = this;
 
-    // 3. Build payload - property names must match your entity Flight
-    const oPayload = {
-        Carrid:        sCarrid,
-        Carrname:      sNewName,
-        Currcode:      sNewCurr,
-        Url:           sNewUrl,
-        IsActiveEntity: true   // important for RAP projections
-    };
+            const sCarrid = oRow.Carrid; // Key
+            const sNewName = this.byId("updCarrNameInput").getValue();
+            const sNewCurr = this.byId("updCurrCodeInput").getValue();
+            const sNewUrl = this.byId("updURLInput").getValue();
 
-    // 4. Build the OData key path: /Flight(Carrid='XX',IsActiveEntity=true)
-    const sPath = oODataModel.createKey("/Flight", {
-        Carrid: sCarrid,
-        IsActiveEntity: true
-    });
 
-    // 5. Call OData update
-    this.oUpdateDialog.setBusy(true);
+            const oODataModel = this.getOwnerComponent().getModel();
+            const that = this;
 
-    oODataModel.update(sPath, oPayload, {
-        merge: true,   // send only changed fields (PATCH-like)
-        success() {
-            that.oUpdateDialog.setBusy(false);
-            that.oUpdateDialog.close();
-            sap.m.MessageToast.show("Airline " + sCarrid + " updated");
 
-            // 6. Reload data from backend into your JSON model
-            that.readFlight(that);
+            const oPayload = {
+                Carrid: sCarrid,
+                Carrname: sNewName,
+                Currcode: sNewCurr,
+                Url: sNewUrl,
+                IsActiveEntity: true
+            };
+
+            const sPath = oODataModel.createKey("/Flight", {
+                Carrid: sCarrid,
+                IsActiveEntity: true
+            });
+
+            this.oUpdateDialog.setBusy(true);
+
+            oODataModel.update(sPath, oPayload, {
+                merge: true,
+                success() {
+                    that.oUpdateDialog.setBusy(false);
+                    that.oUpdateDialog.close();
+                    sap.m.MessageToast.show("Airline " + sCarrid + " updated");
+
+
+                    that.readFlight(that);
+                },
+                error(oError) {
+                    that.oUpdateDialog.setBusy(false);
+                    sap.m.MessageToast.show("Error while updating airline");
+                    console.error("Update error:", oError);
+                }
+            });
         },
-        error(oError) {
-            that.oUpdateDialog.setBusy(false);
-            sap.m.MessageToast.show("Error while updating airline");
-            console.error("Update error:", oError);
-        }
-    });
-},
 
         onCancelUpdate() {
             if (this.oUpdateDialog) {
@@ -193,42 +248,37 @@ sap.ui.define([
             }
         },
 
-        // --- DELETE ROW -------------------------------------------------------
-
         onDeleteAirline(oEvent) {
-    // Debug: make sure the handler is called
-    console.log("onDeleteAirline fired");
-    
-    // Get the context directly from the button
-    const oCtx = oEvent.getSource().getBindingContext("flightDataModel");
+            console.log("onDeleteAirline fired");
 
-    if (!oCtx) {
-        MessageToast.show("No binding context found for this row");
-        console.error("Binding context is null. Check model name 'flightDataModel' and path in XML.");
-        return;
-    }
+            const oCtx = oEvent.getSource().getBindingContext("flightDataModel");
 
-    const oRow = oCtx.getObject();
-    const sCarrid = oRow.Carrid;
+            if (!oCtx) {
+                MessageToast.show("No binding context found for this row");
+                console.error("Binding context is null. Check model name 'flightDataModel' and path in XML.");
+                return;
+            }
 
-    console.log("Deleting airline with Carrid:", sCarrid);
+            const oRow = oCtx.getObject();
+            const sCarrid = oRow.Carrid;
 
-    const oODataModel = this.getOwnerComponent().getModel();
-    const that = this;
+            console.log("Deleting airline with Carrid:", sCarrid);
 
-    oODataModel.callFunction("/Delete_Item_airline", {
-        method: "POST", // or 'GET' depending on how function import is defined
-        urlParameters: {
-            Carrid: sCarrid
-        },
-        success() {
-            MessageToast.show("Airline " + sCarrid + " deleted");
-            that.readFlight(that);
-        },
-        error(oError) {
-            MessageToast.show("Error while deleting airline");
-            console.error("Delete error:", oError);
-                
+            const oODataModel = this.getOwnerComponent().getModel();
+            const that = this;
+
+            oODataModel.callFunction("/Delete_Item_airline", {
+                method: "POST",
+                urlParameters: {
+                    Carrid: sCarrid
+                },
+                success() {
+                    MessageToast.show("Airline " + sCarrid + " deleted");
+                    that.readFlight(that);
+                },
+                error(oError) {
+                    MessageToast.show("Error while deleting airline");
+                    console.error("Delete error:", oError);
                 }
             });
         }

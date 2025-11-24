@@ -19,8 +19,23 @@
                 <OverflowToolbar id="_IDGenOverflowToolbar">
                     <Title id="_IDGenTitle" text="{Products}" level="H2"/>
                     <ToolbarSpacer id="_IDGenToolbarSpacer"/>
-                    <Button id="_IDGenButton1" text="Create Airline" press="onAddNewRecord"/>
-                    <Button id="_IDGenButton2" text="Update Airline" press="onUpdateRecord" />
+
+                    <!-- Download to Excel button -->
+                    <Button
+                        id="_IDGenDownloadBtn"
+                        text="Download Data"
+                        icon="sap-icon://excel-attachment"
+                        press="onExport" />
+
+                    <Button
+                        id="_IDGenButton1"
+                        text="Create Airline"
+                        press="onAddNewRecord" />
+
+                    <Button
+                        id="_IDGenButton2"
+                        text="Update Airline"
+                        press="onUpdateRecord" />
                 </OverflowToolbar>
             </headerToolbar>
 
@@ -51,10 +66,20 @@
                     press="onListItemPress">
 
                     <cells>
-                        <Text id="_IDGenText4" text="{flightDataModel>Carrid}"  wrapping="false" />
-                        <Text id="_IDGenText5" text="{flightDataModel>Carrname}" wrapping="false" />
-                        <Text id="_IDGenText7" text="{flightDataModel>Currcode}" />
-                        <Text id="_IDGenText8" text="{flightDataModel>Url}" />
+                        <Text
+                            id="_IDGenText4"
+                            text="{flightDataModel>Carrid}"
+                            wrapping="false" />
+                        <Text
+                            id="_IDGenText5"
+                            text="{flightDataModel>Carrname}"
+                            wrapping="false" />
+                        <Text
+                            id="_IDGenText7"
+                            text="{flightDataModel>Currcode}" />
+                        <Text
+                            id="_IDGenText8"
+                            text="{flightDataModel>Url}" />
 
                         <Button
                             id="_IDGenDeleteButton"

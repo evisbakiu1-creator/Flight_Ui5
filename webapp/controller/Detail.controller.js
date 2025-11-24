@@ -1,46 +1,105 @@
 sap.ui.define([
-  "sap/ui/core/mvc/Controller",
-  "flightui5ev/formatter/Formatter",
-], (Controller, Formatter, JSONModel) => {
-  "use strict";
+    "sap/ui/core/mvc/Controller",
+    "flightui5ev/formatter/Formatter",
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox",
+    "sap/m/MessageToast"
+], function (Controller, Formatter, JSONModel, MessageBox, MessageToast) {
+    "use strict";
 
-  return Controller.extend("flightui5ev.controller.Detail", {
+    return Controller.extend("flightui5ev.controller.Detail", {
 
-    formatter: Formatter,
+        formatter: Formatter,
 
-    onInit() {
-            
-            this.getOwnerComponent().getRouter().getRoute("Detail").attachPatternMatched(this._onObjectMatched, this);
-            this.getView().getModel("FlightDetailModel");
+        onInit: function () {
+            const oRouter = this.getOwnerComponent().getRouter();
+            oRouter.getRoute("Detail").attachPatternMatched(this._onObjectMatched, this);
         },
 
+        
+        _onObjectMatched: function (oEvent) {
+            const sCarrId = oEvent.getParameter("arguments").Carrid;
+            this._sCarrid = sCarrId; 
 
-    _onObjectMatched: function (oEvent) {
-               //read the url parameters
-                var sCarrId = oEvent.getParameter("arguments").Carrid;
+            const oDetailJSONModel = new JSONModel();
+            const oDataModel = this.getOwnerComponent().getModel();
+            const sPath = "/Flight(Carrid='" + sCarrId + "',IsActiveEntity=true)";
+            const that = this;
 
-                var oDetailJSONModel = new sap.ui.model.json.JSONModel();
-                var that = this;
-                //read the data from Back End (READ_GET_ENTITY)
-                var oDataModel = this.getOwnerComponent().getModel();
-                var sPath = "/Flight(Carrid='" + sCarrId + "',IsActiveEntity=true)";
+            oDataModel.read(sPath, {
+                urlParameters: {
+                    "$expand": "to_DetailEVI"
+                },
+                success: function (oResponse) {
+                    oDetailJSONModel.setData(oResponse);
+                    that.getView().setModel(oDetailJSONModel, "FlightDetailModel");
+                },
+                error: function (oError) {
+                    console.error("Error reading flight detail:", oError);
+                }
+            });
+        },
 
-                oDataModel.read(sPath, {
-                    urlParameters: {
-                        "$expand": "to_DetailEVI" // Replace with your navigation property name
-                    },
+    
+        onDeleteFlightDetail: function (oEvent) {
+    const oButton = oEvent.getSource();
 
-                    success: function (oresponse) {
-                        console.log(oresponse);
-                        //attach the data to the model
-                        oDetailJSONModel.setData(oresponse);
-                        //attach the Model to the View
-                        that.getView().setModel(oDetailJSONModel, "FlightDetailModel");
-                        console.log(that.getView().getModel("FlightDetailModel"));
-                    },
-                    error: function (oerror) { },
+    // 1) Context of clicked row in the JSON model
+    const oCtx = oButton.getBindingContext("FlightDetailModel");
+    if (!oCtx) {
+        sap.m.MessageToast.show("No binding context for this row");
+        return;
+    }
+
+    const sRowPath = oCtx.getPath();   // e.g. "/to_DetailEVI/results/3"
+    const oRow = oCtx.getObject();     // row data
+
+    // Keys of the child entity (from ZR_FLIGHT_DETAIL_EVI)
+    const sCarrid = oRow.Carrid;
+    const sConnid = oRow.Connid;
+
+    const oODataModel = this.getOwnerComponent().getModel();
+    const that = this;
+
+    sap.m.MessageBox.confirm(
+        "Do you really want to delete flight " + sConnid + "?",
+        {
+            actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+            onClose: function (sAction) {
+                if (sAction !== sap.m.MessageBox.Action.OK) {
+                    return;
+                }
+                
+                const sDeletePath = oODataModel.createKey("/FlightDetailsEVI", {
+                    Carrid: sCarrid,
+                    Connid: sConnid,
+                    IsActiveEntity: true
                 });
-            },
+
+                oODataModel.remove(sDeletePath, {
+                    success: function () {
+                        sap.m.MessageToast.show("Flight " + sConnid + " deleted");
+
+                        const oJsonModel = that.getView().getModel("FlightDetailModel");
+                        const aDetails = oJsonModel.getProperty("/to_DetailEVI/results") || [];
+
+                        const aParts = sRowPath.split("/");
+                        const iIndex = parseInt(aParts[aParts.length - 1], 10);
+
+                        if (!Number.isNaN(iIndex) && aDetails[iIndex]) {
+                            aDetails.splice(iIndex, 1);
+                            oJsonModel.setProperty("/to_DetailEVI/results", aDetails);
+                        }
+                    },
+                    error: function (oError) {
+                        sap.m.MessageToast.show("Error while deleting flight");
+                        console.error("Delete error:", oError);
+                            }
+                        });
+                    }
+                }
+            );
+        }
+
     });
 });
-
