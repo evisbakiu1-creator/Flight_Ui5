@@ -3,8 +3,10 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/model/json/JSONModel",
     "sap/ui/export/Spreadsheet",
-    "sap/ui/export/library"
-], (Controller, MessageToast, JSONModel, Spreadsheet, exportLibrary) => {
+    "sap/ui/export/library",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator"
+], (Controller, MessageToast, JSONModel, Spreadsheet, exportLibrary, Filter, FilterOperator) => {
     "use strict";
 
     const EdmType = exportLibrary.EdmType;
@@ -26,42 +28,47 @@ sap.ui.define([
                     that.getView().setModel(oFlightJSONModel, "flightDataModel");
                 },
                 error(oError) {
-                    
+
                 }
             });
         },
 
         // DOWNLOAD TO EXCEL
 
-        onExport() {
-            const oView = this.getView();
-            const oModel = oView.getModel("flightDataModel");
+       onExport() {
+    const oTable = this.byId("_IDGenTable1");
+    const oBinding = oTable.getBinding("items");
 
-            if (!oModel) {
-                MessageToast.show("No data to export");
-                return;
-            }
+    if (!oBinding) {
+        MessageToast.show("No data to export");
+        return;
+    }
 
-            const aData = oModel.getData();   
+    // 
+    const aContexts = oBinding.getCurrentContexts();
+    const aData = aContexts.map(function (oCtx) {
+        return oCtx.getObject();
+    });
 
-            if (!aData || !aData.length) {
-                MessageToast.show("Table is empty");
-                return;
-            }
-             const aCols = this._createColumnConfig();
-             const oSettings = {
-                workbook: {
-                    columns: aCols
-                },
-                dataSource: aData,
-                fileName: "Airlines.xlsx"
-            };
+    if (!aData || !aData.length) {
+        MessageToast.show("Table is empty");
+        return;
+    }
 
-            const oSheet = new Spreadsheet(oSettings);
-            oSheet.build().finally(function () {
-                oSheet.destroy();
-            });
+    const aCols = this._createColumnConfig();
+    const oSettings = {
+        workbook: {
+            columns: aCols
         },
+        dataSource: aData,
+        fileName: "Airlines.xlsx"
+    };
+
+    const oSheet = new Spreadsheet(oSettings);
+    oSheet.build().finally(function () {
+        oSheet.destroy();
+    });
+},
 
         _createColumnConfig() {
             return [
@@ -281,6 +288,29 @@ sap.ui.define([
                     console.error("Delete error:", oError);
                 }
             });
+        },
+
+        onSearchAirline(oEvent) {
+            const sQuery = oEvent.getSource().getValue();
+            const oTable = this.byId("_IDGenTable1");
+            const oBinding = oTable.getBinding("items");
+
+            if (!sQuery) {
+                oBinding.filter([]);
+                return;
+            }
+
+            const aFilters = [
+                new Filter("Carrid",   FilterOperator.Contains, sQuery),
+                new Filter("Carrname", FilterOperator.Contains, sQuery)
+            ];
+
+            const oCombinedFilter = new Filter({
+                filters: aFilters,
+                and: false 
+            });
+
+            oBinding.filter(oCombinedFilter);
         }
 
     });

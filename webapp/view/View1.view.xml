@@ -36,6 +36,13 @@
                         id="_IDGenButton2"
                         text="Update Airline"
                         press="onUpdateRecord" />
+                        
+                     <SearchField
+        id="airlineSearch"
+        width="15rem"
+        placeholder="Search ID or Name"
+        liveChange=".onSearchAirline" />
+
                 </OverflowToolbar>
             </headerToolbar>
 
@@ -85,8 +92,11 @@
                             id="_IDGenDeleteButton"
                             icon="sap-icon://delete"
                             type="Transparent"
+                            class="squareDeleteButton"
                             tooltip="Delete airline"
-                            press="onDeleteAirline" />
+                            press="onDeleteAirline" 
+                            
+                             />
                     </cells>
                 </ColumnListItem>
             </items>

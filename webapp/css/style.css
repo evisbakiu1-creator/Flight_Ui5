@@ -1,1 +1,36 @@
-/* Enter your custom styles here */
+/* Base state: blue border, transparent background, blue icon */
+.sapMBtn.squareDeleteButton > .sapMBtnInner {
+    background-color: transparent !important;
+    border: 2px solid #2757BA;         /* blue stroke */
+    border-radius: 0.5rem;             /* rounded edges */
+    padding: 0;                        /* keep it tight */
+    min-width: 2rem;                   /* square size */
+    height: 2rem;
+    box-shadow: none;
+}
+
+.sapMBtn.squareDeleteButton > .sapMBtnInner > .sapMBtnIcon {
+    color: #2757BA;                    /* blue icon */
+    line-height: 2rem;
+}
+
+/* Hover: same style but red */
+.sapMBtn.squareDeleteButton:hover > .sapMBtnInner {
+    border-color: #e74c3c;             /* red stroke on hover */
+    background-color: transparent;     /* still transparent */
+}
+
+.sapMBtn.squareDeleteButton:hover > .sapMBtnInner > .sapMBtnIcon {
+    color: #e74c3c;                    /* red icon on hover */
+}
+
+/* Optional: pressed/active state */
+.sapMBtn.squareDeleteButton:active > .sapMBtnInner,
+.sapMBtn.squareDeleteButton > .sapMBtnInner.sapMBtnActive {
+    border-color: #c0392b;
+}
+
+.sapMBtn.squareDeleteButton:active > .sapMBtnInner > .sapMBtnIcon,
+.sapMBtn.squareDeleteButton > .sapMBtnInner.sapMBtnActive > .sapMBtnIcon {
+    color: #c0392b;
+}
